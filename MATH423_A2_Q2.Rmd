@@ -1,0 +1,81 @@
+---
+title: "MATH423_A2_Q2"
+output: word_document
+---
+
+Reading in the data and setting up the variables 
+```{r}
+file1 <- "http://www.math.mcgill.ca/yyang/regression/data/salary.csv"
+salary <- read.csv(file1, header = TRUE)
+x1 <- salary$SPENDING/1000
+y1 <- salary$SALARY
+fit.Salary <- lm(y1 ~ x1)
+summary(fit.Salary)
+```
+
+Question 2.1 
+```{r}
+#Plotting the residuals 
+plot(x1,residuals(fit.Salary))
+abline(h=0,col='red',lty=2)
+```
+
+Looking at this residual plot we are able to see that the data points are not closely clustered around 0, which is a requirement for the residual plot. However, the residuals do not demonstrate any obvious patter. There are a few outliers but they do not greatly hinder the quality of the residual plot. 
+
+Question 2.2
+```{r}
+qqnorm(residuals(fit.Salary))
+```
+
+From this Q-Q plot we are able to see that the residuals do fit a normal distribution because they form a straight line, which is a requirement for a Gaussian Q-Q plot. 
+
+Question 2.3
+```{r}
+fit.Salary <- lm(y1 ~ x1)
+residuals.Salary <- residuals(fit.Salary)
+fitted.Salary <- fitted(fit.Salary)
+sum(residuals.Salary) #sum of residuals 
+
+sum(x1*residuals.Salary) #sum of x times residuals 
+
+sum(fitted.Salary*residuals.Salary) #sum of fitted values times residuals 
+
+#All of these are small, so we're good. 
+```
+
+Question 2.4
+```{r}
+summary(fit.Salary)
+```
+
+From the above summary of fit.Salary we are able to see that the estimators for beta hat not and beta hat one are as follows: 
+
+beta hat not: 12129.4
+beta hat one: 3307.6 
+
+Analysis: 
+Both p values beta hat not and beta hat one are very small, so we can say that the estimates for beta hat not and beta hat one are significant and strong/good estimators. 
+
+Question 2.5 
+
+Let us say that our null hypothesis H_0: Beta_1 = 0 and the alternative H_1: Beta_1 != 0 (where != means does not equal)
+Looking at the summary from Question 2.4 we can see that the p-value of 2.71e-14 is less than the alpha level of 0.05, which indicates that we reject the null hypothesis. Therefore, there is a statistically significant relationship between SPENDING and SALARY at an alpha level of 0.05. 
+
+Question 2.6 
+```{r}
+error <- qt(0.90,df=49)*311.7 
+left <- 3307.6-error #2902.680
+right <- 3307.6+error #3712.519 
+```
+
+From the above calculations we have that a 90% confidence interval for Beta_1 is [2902.680 , 3712.519]. Therefore we can say that we are 90% confident that the true value for Beta_1 falls within this interval.
+
+Question 2.7 
+
+From this model we have that the fitted model is as follows: 
+
+SALARY = 12129.4 + 3307.6 * SPENDING 
+
+Therefore, the salary of a teacher whose spending per student is 4800$ is: 
+
+SALARY = 12129.4 + 3307.6 * 4800 = 15,888,609 USD 
